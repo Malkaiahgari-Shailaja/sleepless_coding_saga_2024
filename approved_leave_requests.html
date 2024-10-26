@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approved Leave Requests</title>
+    <style>
+        body {
+            height:100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #6a0dad, #e0e0e0);
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Approved Leave Requests</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Roll Number</th>
+            <th>Departure Date</th>
+            <th>Return Date</th>
+            <th>Your Phone</th>
+            <th>Parent's Phone</th>
+            <th>Destination</th>
+        </tr>
+    </thead>
+    <tbody id="requestTable">
+        <tr>
+            <td>John Doe</td>
+            <td>123</td>
+            <td>2024-10-01</td>
+            <td>2024-10-10</td>
+            <td>(123) 456-7890</td>
+            <td>(987) 654-3210</td>
+            <td>New York</td>
+        </tr>
+        <tr>
+            <td>Jane Smith</td>
+            <td>124</td>
+            <td>2024-10-05</td>
+            <td>2024-10-12</td>
+            <td>(234) 567-8901</td>
+            <td>(876) 543-2109</td>
+            <td>Los Angeles</td>
+        </tr>
+        <!-- Add more rows as needed -->
+    </tbody>
+</table>
+
+</body>
+</html>

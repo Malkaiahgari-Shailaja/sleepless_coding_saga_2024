@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Leave Requests</title>
+    <style>
+        body {
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: linear-gradient(to bottom, #6a0dad, #e0e0e0);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+        }
+        button.reject {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Pending Leave Requests</h1>
+<table>
+    <thead>
+        <tr>
+            <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+            <th>Name</th>
+            <th>Roll Number</th>
+            <th>Departure Date</th>
+            <th>Return Date</th>
+            <th>Your Phone</th>
+            <th>Parent's Phone</th>
+            <th>Destination</th>
+        </tr>
+    </thead>
+    <tbody id="requestTable">
+        <tr>
+            <td><input type="checkbox" class="request-checkbox"></td>
+            <td>John Doe</td>
+            <td>123</td>
+            <td>2024-10-01</td>
+            <td>2024-10-10</td>
+            <td>(123) 456-7890</td>
+            <td>(987) 654-3210</td>
+            <td>New York</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" class="request-checkbox"></td>
+            <td>Jane Smith</td>
+            <td>124</td>
+            <td>2024-10-05</td>
+            <td>2024-10-12</td>
+            <td>(234) 567-8901</td>
+            <td>(876) 543-2109</td>
+            <td>Los Angeles</td>
+        </tr>
+        <!-- Add more rows as needed -->
+    </tbody>
+</table>
+
+<button onclick="acceptRequests()">Accept</button>
+<button class="reject" onclick="rejectRequests()">Reject</button>
+
+<script>
+    function toggleSelectAll() {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const checkboxes = document.querySelectorAll('.request-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    function acceptRequests() {
+        const checkboxes = document.querySelectorAll('.request-checkbox:checked');
+        checkboxes.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+            const name = row.cells[1].innerText;
+            // Here you can implement the logic to send the QR code
+            alert(`Accepted request from ${name}. A QR code will be sent.`);
+        });
+    }
+
+    function rejectRequests() {
+        const checkboxes = document.querySelectorAll('.request-checkbox:checked');
+        checkboxes.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+            const name = row.cells[1].innerText;
+            // Logic to reject the request can be implemented here
+            alert(`Rejected request from ${name}.`);
+        });
+    }
+</script>
+
+</body>
+</html>

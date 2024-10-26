@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management</title>
+</head>
+<body>
+  <h1>Student Management</h1>
+
+  <!-- Form to add a new student -->
+  <h2>Add New Student</h2>
+  <input type="text" id="name" placeholder="Name">
+  
+  <input type="number" id="roll_number" placeholder="Roll Number">
+  <input type="text" id="branch" placeholder="Branch">
+  <input type="number" id="marks" placeholder="Marks">
+  <button onclick="addStudent()">Add Student</button>
+
+  <h2>Filter Students by Marks</h2>
+  <input type="number" id="minMarks" placeholder="Min Marks">
+  <input type="number" id="maxMarks" placeholder="Max Marks">
+  <button onclick="filterStudents()">Filter</button>
+
+  <h2>Sort Students</h2>
+  <button onclick="sortStudents('ASC')">Sort by Marks (ASC)</button>
+  <button onclick="sortStudents('DESC')">Sort by Marks (DESC)</button>
+
+  <h2>Search Student</h2>
+  <input type="text" id="searchName" placeholder="Student Name">
+  <button onclick="searchStudent()">Search</button>
+
+  <h2>All Students</h2>
+  <button onclick="getAllStudents()">Get All Students</button>
+  <pre id="output"></pre>
+
+  <script>
+    const apiUrl = 'http://localhost:6969/api/students';
+
+    function getAllStudents() {
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function filterStudents() {
+      const minMarks = document.getElementById('minMarks').value;
+      const maxMarks = document.getElementById('maxMarks').value;
+      fetch(`${apiUrl}/filter?minMarks=${minMarks}&maxMarks=${maxMarks}`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function sortStudents(order) {
+      fetch(`${apiUrl}/sort?order=${order}`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function searchStudent() {
+      const name = document.getElementById('searchName').value;
+      fetch(`${apiUrl}/search?name=${name}`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function addStudent() {
+      const name = document.getElementById('name').value;
+      const roll_number = document.getElementById('roll_number').value;
+      const branch = document.getElementById('branch').value;
+      const marks = document.getElementById('marks').value;
+      const student = { name, roll_number, branch, marks };
+
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(student)
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message);
+          getAllStudents();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+</html>
+

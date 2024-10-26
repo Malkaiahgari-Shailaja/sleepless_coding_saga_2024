@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up/Login Page</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background: linear-gradient(to bottom, #6a0dad, #e0e0e0);
+            }
+            .container {
+                text-align: center;
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            button {
+                padding: 10px 20px;
+                margin: 10px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .signup {
+                background-color: #28a745;
+                color: white;
+            }
+            .login {
+                background-color: #007bff;
+                color: white;
+            }
+            button:hover {
+                opacity: 0.9;
+            }
+            .Faculty {
+                background-color: cyan;
+            }
+            .Student{
+                background-color:burlywood
+            }
+        </style>
+    </head>
+    <body>
+    
+    <div class="container">
+        <h1>Welcome</h1>
+        <button class="Faculty" onclick="location.href='faculty.html'">Faculty</button>
+        <button class="Student" onclick="location.href='login.html'">Student</button>
+    </div>
+    
+    </body>
+    </html>

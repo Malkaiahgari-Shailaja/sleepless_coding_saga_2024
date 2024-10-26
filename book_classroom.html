@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #6a0dad, #e0e0e0);
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #007bff;
+            padding: 15px 20px;
+            color: white;
+        }
+        header img {
+            width: 40px; /* Size of the logo */
+            border-radius: 50%; /* Circular logo */
+            cursor: pointer; /* Makes logo clickable */
+        }
+        .home-button img {
+            width: 40px; /* Size of the home logo */
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form input, form textarea {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="#" class="home-button">
+        <img src="home.png" alt="Home Logo" /> <!-- Replace with your home logo URL -->
+    </a>
+    <img src="profile.png" alt="Profile Logo" onclick="alert('Profile Logo Clicked!')" /> <!-- Replace with your profile logo URL -->
+</header>
+
+<div class="container">
+    <h1>Your Form</h1>
+    <form id="profileForm">
+        <input type="tel" placeholder="Phone Number" required>
+        <label for="departureDate">Date of Departure:</label>
+        <input type="date" placeholder="Date of Departure" required>
+        <label for="departuretime">time of Departure:</label>
+        <input type="time" placeholder="Time of Departure" required>
+        <label for="arrivalDate">Date of arrival:</label>
+        <input type="date" placeholder="Date of Arrival" required>
+        <label for="arrivaltime">time of arrival:</label>
+        <input type="time" placeholder="Time of Arrival" required>
+        <textarea placeholder="Reason" rows="4" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>
