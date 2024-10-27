@@ -227,8 +227,10 @@ function getclassrooms() {
 }
 //to display pending leave requests
 app.get('/get_pending_leave_requests', (req, res) => {
-  const query = 'SELECT * pending_leave_requests'; 
+  const query = 'SELECT * from pending_leave_requests'; 
   connection.query(query, (err, results) => {
+    console.log(err);
+    
       if (err) {
           return res.status(500).json({ message: 'Error fetching data' });
       }
@@ -236,7 +238,7 @@ app.get('/get_pending_leave_requests', (req, res) => {
   });
 });
 //to display pending classroom requests
-app.get('/get_pending_classroom_requests', (req, res) => {
+/*app.get('/get_pending_classroom_requests', (req, res) => {
   const query = 'SELECT classroom_number, date, time_slot, name, rollnumber FROM pending_classroom_requests';
   db.query(query, (err, results) => {
       if (err) {
@@ -244,10 +246,19 @@ app.get('/get_pending_classroom_requests', (req, res) => {
       }
       res.json(results);
   });
+});*/
+app.get('/get_pending_classroom_requests', (req, res) => {
+  const query = 'SELECT * from pending_classroom_requests'; 
+  connection.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({ message: 'Error fetching data' });
+      }
+      res.json(results);
+  });
 });
 //to display approved leave requests
 app.get('/get_approved_leave_requests', (req, res) => {
-  const query = 'SELECT * pending_leave_requests'; 
+  const query = 'SELECT * from pending_leave_requests'; 
   connection.query(query, (err, results) => {
       if (err) {
           return res.status(500).json({ message: 'Error fetching data' });
