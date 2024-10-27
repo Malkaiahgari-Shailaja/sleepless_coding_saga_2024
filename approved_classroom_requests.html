@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending leave Requests</title>
+    <title>Approved Classroom Requests</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,18 +59,16 @@
     </style>
 </head>
 <body>
-    <h1>Pending Leave Requests</h1>
-    <button id="viewRequestsButton">View Pending leave Requests</button>
+    <h1>Approved Classroom Requests</h1>
+    <button id="viewRequestsButton">View Approved Classroom Requests</button>
     <table id="requestsTable" style="display: none;">
         <thead>
             <tr>
-                <th>date_of_departure</th>
-                <th>date_of_arrival</th>
-                <th>destination</th>
-                <th>phone_number</th>
-                <th>parents_phone_number</th>
-                <th>name</th>
-                <th>rollnumber</th>
+                <th>Classroom Number</th>
+                <th>Date</th>
+                <th>Time Slot</th>
+                <th>Name</th>
+                <th>Roll Number</th>
             </tr>
         </thead>
         <tbody>
@@ -82,7 +80,7 @@
     <script>
         document.getElementById('viewRequestsButton').addEventListener('click', () => {
             // Fetch data from the server
-            fetch('http://localhost:6969/get_pending_leave_requests')
+            fetch('http://localhost:6969/get_approved_classroom_requests')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -102,11 +100,9 @@
                         const row = document.createElement('tr');
 
                         row.innerHTML = `
-                            <td>${request.date_of_departure}</td>
-                            <td>${request.date_of_arrival}</td>
-                            <td>${request.destination}</td>
-                            <td>${request.phone_number}</td>
-                            <td>${request.parents_phone_number}</td>
+                            <td>${request.classroom_number}</td>
+                            <td>${request.date}</td>
+                            <td>${request.time_slot}</td>
                             <td>${request.name}</td>
                             <td>${request.rollnumber}</td>
                         `;

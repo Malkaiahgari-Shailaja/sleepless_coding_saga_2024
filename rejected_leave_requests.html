@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending leave Requests</title>
+    <title>rejected leave Requests</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,8 +59,8 @@
     </style>
 </head>
 <body>
-    <h1>Pending Leave Requests</h1>
-    <button id="viewRequestsButton">View Pending leave Requests</button>
+    <h1>Rejected Leave Requests</h1>
+    <button id="viewRequestsButton">View Rejected leave Requests</button>
     <table id="requestsTable" style="display: none;">
         <thead>
             <tr>
@@ -82,7 +82,7 @@
     <script>
         document.getElementById('viewRequestsButton').addEventListener('click', () => {
             // Fetch data from the server
-            fetch('http://localhost:6969/get_pending_leave_requests')
+            fetch('http://localhost:6969/get_rejected_leave_requests')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Network response was not ok: ${response.statusText}`);

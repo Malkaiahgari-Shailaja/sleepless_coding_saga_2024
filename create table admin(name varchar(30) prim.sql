@@ -1,0 +1,1 @@
+create table pending_classroom_requests (classroom_number varchar(20), date varchar(20), time_slot varchar(20), name varchar(20), rollnumber varchar(20));

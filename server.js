@@ -26,111 +26,60 @@ connection.connect(err => {
   console.log('Connected to MySQL');
 });
 
-/*
-// API to get all students data
-app.get('/api/students', (req, res) => {
-  const query = 'SELECT * FROM students';
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error('Error fetching data:', err);
-      res.status(500).send('Server Error');
-      return;
-    }
-    res.json(results);
-  });
-});
-
-// API to filter students by marks
-app.get('/api/students/filter', (req, res) => {
-  const { minMarks, maxMarks } = req.query;
-  const query = 'SELECT * FROM students WHERE marks BETWEEN ? AND ?';
-  connection.query(query, [minMarks, maxMarks], (err, results) => {
-    if (err) {
-      console.error('Error filtering data:', err);
-      res.status(500).send('Server Error');
-      return;
-    }
-    res.json(results);
-  });
-});
-
-// API to sort students by marks
-app.get('/api/students/sort', (req, res) => {
-  const { order } = req.query; // 'ASC' or 'DESC'
-  const query = `SELECT * FROM students ORDER BY marks ${order}`;
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error('Error sorting data:', err);
-      res.status(500).send('Server Error');
-      return;
-    }
-    res.json(results);
-  });
-});
-
-// API to search for a student by name
-app.get('/api/students/search', (req, res) => {
-  const { name } = req.query;
-  const query = 'SELECT * FROM students WHERE name LIKE ?';
-  connection.query(query, [`%${name}%`], (err, results) => {
-    if (err) {
-      console.error('Error searching data:', err);
-      res.status(500).send('Server Error');
-      return;
-    }
-    res.json(results);
-  });
-});
-
-// API to add a new student
-app.post('/api/students', (req, res) => {
-  const { name, roll_number, branch, marks } = req.body;
-  const query = 'INSERT INTO students (name, roll_number, branch, marks) VALUES (?, ?, ?, ?)';
-  connection.query(query, [name, roll_number, branch, marks], (err, results) => {
-    if (err) {
-      console.error('Error adding student:', err);
-      res.status(500).send('Server Error');
-      return;
-    }
-    res.json({ message: 'Student added successfully', studentId: results.insertId });
-  });
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});*/
-
-
 // Middleware to check user credentials
-async function checkUserCredentials(email, password) {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      'SELECT * FROM users WHERE email = ? AND password = ?',
-      [email, password],
-      (err, results) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(results[0]);
-        }
+app.post('/authentication', (req, res) => {
+  const { email, password } = req.body; // Extract email and password from the request body
+  
+  connection.query(
+    'SELECT * FROM users WHERE email = ? AND password = ?',
+    [email, password],
+    (err, results) => {
+      if (err) {
+        // Handle the error and send a response
+        res.status(500).send('Database error');
+      } else if (results.length > 0) {
+        // Authentication successful, send the user data or a success message
+        res.status(200).json({ message: 'Authentication successful', user: results[0] });
+      } else {
+        // No user found with the provided credentials
+        res.status(401).json({ message: 'Invalid email or password' });
       }
-    );
-  });
-}
+    }
+  );
+});
+
+
+// Middleware to check admin credentials
+app.post('/admin_authentication', (req, res) => {
+  const { email, password } = req.body; // Extract email and password from the request body
+  
+  connection.query(
+    'SELECT * FROM admin WHERE email = ? AND password = ?',
+    [email, password],
+    (err, results) => {
+      if (err) {
+        // Handle the error and send a response
+        return res.status(500).send('Database error');
+      }
+      if (results.length > 0) {
+        // Authentication successful, send the user data or a success message
+        return res.status(200).json({ message: 'Authentication successful', user: results[0] });
+      } else {
+        // No user found with the provided credentials
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+    }
+  );
+});
+
+
+
 
 // Route to add a leave request
 app.post('/addLeaveRequest', async (req, res) => {
   const { email, password, dateOfDeparture, dateOfArrival, destination, phoneNumber, parentsPhoneNumber } = req.body;
 
   try {
-    const user = await checkUserCredentials(email, password);
-    if (!user) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
-
-    const { name, rollnumber } = user;
-
     connection.query(
       'INSERT INTO pending_leave_requests (date_of_departure, date_of_arrival, destination, phone_number, parents_phone_number, name, rollnumber) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [dateOfDeparture, dateOfArrival, destination, phoneNumber, parentsPhoneNumber, name, rollnumber],
@@ -186,6 +135,157 @@ app.post('/updateLeaveRequest', (req, res) => {
     }
   );
 });
+
+app.get('/getclassrooms', (req, res) => {
+  connection.query('SELECT number, capacity FROM classrooms', (err, results) => {
+      if (err) {
+          return res.status(500).json({ message: 'Database error', error: err });
+      }
+      res.status(200).json(results); // Send the results as JSON
+  });
+});
+
+
+// Route to add a classroom booking request
+app.post('/addClassroomBookingRequest', async (req, res) => {
+  const { email, password, classroomNumber, date, timeSlot } = req.body;
+
+  try {
+    connection.query(
+      'INSERT INTO pending_classroom_requests (classroom_number, date, time_slot, name, rollnumber) VALUES (?, ?, ?, ?, ?)',
+      [classroomNumber, date, timeSlot, email , password],
+      (err, results) => {
+        if (err) {
+          return res.status(500).json({ message: 'Error adding booking request' });
+        }
+        res.status(201).json({ message: 'Booking request added', requestId: results.insertId });
+      }
+    );
+
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error', error });
+  }
+});
+
+// Route for admin to approve or reject a classroom booking request
+app.post('/updateClassroomBookingRequest', (req, res) => {
+  const { rollnumber, status } = req.body; // rollnumber is used instead of requestId, status should be 'approved' or 'rejected'
+  const table = status === 'approved' ? 'approved_classroom_requests' : 'rejected_classroom_requests';
+
+  // Move the request to the approved or rejected table
+  connection.query(
+    'SELECT * FROM pending_classroom_requests WHERE rollnumber = ?',
+    [rollnumber],
+    (err, results) => {
+      if (err || results.length === 0) {
+        return res.status(404).json({ message: 'Request not found' });
+      }
+
+      const { classroom_number, date, time_slot, name } = results[0];
+
+      connection.query(
+        `INSERT INTO ${table} (classroom_number, date, time_slot, name, rollnumber) VALUES (?, ?, ?, ?, ?)`,
+        [classroom_number, date, time_slot, name, rollnumber],
+        (err) => {
+          if (err) {
+            return res.status(500).json({ message: 'Error moving request' });
+          }
+
+          connection.query(
+            'DELETE FROM pending_classroom_requests WHERE rollnumber = ?',
+            [rollnumber],
+            (err) => {
+              if (err) {
+                return res.status(500).json({ message: 'Error deleting pending request' });
+              }
+              res.status(200).json({ message: `Request ${status}` });
+            }
+          );
+        }
+      );
+    }
+  );
+});
+function getclassrooms() {
+  fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+          const classroomNumber = document.getElementById('classroomSelect');
+          classroomNumber.innerHTML = ''; // Clear existing options
+
+          // Create and append options to the select element
+          data.forEach(classroom => {
+              const option = document.createElement('option');
+              option.textContent = classroom.number; // Assuming each classroom object has a 'number' property
+              classroomNumber.appendChild(option);
+          });
+
+          // Optionally, display the fetched data in a formatted manner
+          document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+      })
+      .catch(error => console.error('Error:', error));
+}
+//to display pending leave requests
+app.get('/get_pending_leave_requests', (req, res) => {
+  const query = 'SELECT * pending_leave_requests'; 
+  connection.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({ message: 'Error fetching data' });
+      }
+      res.json(results);
+  });
+});
+//to display pending classroom requests
+app.get('/get_pending_classroom_requests', (req, res) => {
+  const query = 'SELECT classroom_number, date, time_slot, name, rollnumber FROM pending_classroom_requests';
+  db.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({ error: err.message });
+      }
+      res.json(results);
+  });
+});
+//to display approved leave requests
+app.get('/get_approved_leave_requests', (req, res) => {
+  const query = 'SELECT * pending_leave_requests'; 
+  connection.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({ message: 'Error fetching data' });
+      }
+      res.json(results);
+  });
+});
+//to display approved classroom requests
+app.get('/get_approved_classroom_requests', (req, res) => {
+  const query = 'SELECT classroom_number, date, time_slot, name, rollnumber FROM pending_classroom_requests';
+  db.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({ error: err.message });
+      }
+      res.json(results);
+  });
+});
+//to display rejected leave requests
+app.get('/get_rejected_leave_requests', (req, res) => {
+  const query = 'SELECT * pending_leave_requests'; 
+  connection.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({ message: 'Error fetching data' });
+      }
+      res.json(results);
+  });
+});
+//to display rejected classroom requests
+app.get('/get_rejected_classroom_requests', (req, res) => {
+  const query = 'SELECT classroom_number, date, time_slot, name, rollnumber FROM pending_classroom_requests';
+  db.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({ error: err.message });
+      }
+      res.json(results);
+  });
+});
+
 
 // Start the server
 app.listen(port, () => {

@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const port = 6420;
+const port = 6420;                                                   [ unneccessary file ]
 
 app.use(bodyParser.json());
 app.use(cors());

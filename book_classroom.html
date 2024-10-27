@@ -62,6 +62,9 @@
         button:hover {
             background-color: #0056b3;
         }
+        option{
+            background-color:white;
+        }
     </style>
 </head>
 <body>
@@ -76,19 +79,105 @@
 <div class="container">
     <h1>Your Form</h1>
     <form id="profileForm">
-        <input type="tel" placeholder="Phone Number" required>
-        <label for="departureDate">Date of Departure:</label>
-        <input type="date" placeholder="Date of Departure" required>
-        <label for="departuretime">time of Departure:</label>
-        <input type="time" placeholder="Time of Departure" required>
-        <label for="arrivalDate">Date of arrival:</label>
-        <input type="date" placeholder="Date of Arrival" required>
-        <label for="arrivaltime">time of arrival:</label>
-        <input type="time" placeholder="Time of Arrival" required>
-        <textarea placeholder="Reason" rows="4" required></textarea>
-        <button type="submit">Submit</button>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br>
+        
+        <label for="classroomNumber">Select Classroom:</label>
+        <select id="classroomNumber" required></select><br>
+        
+        <label for="date">Date:</label>
+        <input type="date" id="date" required><br>
+        
+        <label for="timeSlot">Time Slot:</label>
+        <input type="time" id="timeSlot" required><br>
+        
+        <button type="submit">Submit Booking Request</button>
     </form>
 </div>
+<script>
+    /*
+    // Fetch available classrooms and populate the dropdown
+    async function fetchAvailableClassrooms() {
+        const response = await fetch('http://localhost:6969/availableClassrooms');
+        const classrooms = await response.json();
+        const classroomSelect = document.getElementById('classroomNumber');
+
+        classrooms.forEach(classroom => {
+            const option = document.createElement('option');
+            option.value = classroom.classroom_number;
+            option.textContent = `Classroom ${classroom.classroom_number} - Capacity: ${classroom.capacity}`;
+            classroomSelect.appendChild(option);
+        });
+    }
+*/
+const apiUrl ='http://localhost:6969/getclassrooms' ; // Your API endpoint
+
+        // Function to fetch options and populate the select tag
+        function fetchOptions() {
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const selectElement = document.getElementById('classroomNumber');
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.textContent = item.number+ "capacity:"+item.capacity ; // Set the value to the ID from the database
+                        //option.textContent = item.capacity; // Set the displayed text to the name from the database
+                        selectElement.appendChild(option); // Add the option to the select
+                    });
+                })
+                .catch(error => console.error('Error fetching options:', error));
+        }
+
+        // Fetch options when the page loads
+        window.onload = fetchOptions;
+
+    document.getElementById('profileForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const classroomNumber = document.getElementById('classroomNumber').value;
+        const date = document.getElementById('date').value;
+        const timeSlot = document.getElementById('timeSlot').value;
+
+        const requestData = {
+            email,
+            password,
+            classroomNumber,
+            date,
+            timeSlot
+        };
+
+        try {
+            const response = await fetch('http://localhost:6969/addClassroomBookingRequest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message);
+                alert('error in response');
+            }
+
+            const data = await response.json();
+            alert(`Booking request submitted: ${data.message}`);
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    });
+
+</script>
 
 </body>
 </html>
