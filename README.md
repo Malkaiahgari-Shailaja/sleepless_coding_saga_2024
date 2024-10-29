@@ -1,6 +1,8 @@
 # sleepless_coding_saga_2024
 this repo has all the files made for the problem statement digitalizing campus security. 
 
+------------------[   index2.html is the first page of website        ]---------------------------------
+
 frontend: html(css and js files are not created seperately , but included in html)
 backend:nodejs,express;
 database:mysql
