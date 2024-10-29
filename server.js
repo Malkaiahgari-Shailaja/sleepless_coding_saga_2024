@@ -82,7 +82,7 @@ app.post('/addLeaveRequest', async (req, res) => {
   try {
     connection.query(
       'INSERT INTO pending_leave_requests (date_of_departure, date_of_arrival, destination, phone_number, parents_phone_number, name, rollnumber) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [dateOfDeparture, dateOfArrival, destination, phoneNumber, parentsPhoneNumber, name, rollnumber],
+      [dateOfDeparture, dateOfArrival, destination, phoneNumber, parentsPhoneNumber, email, password],
       (err, results) => {
         if (err) {
           return res.status(500).json({ message: 'Error adding leave request' });
