@@ -41,7 +41,7 @@ insert into pending_leave_requests values('30.10.2024','01.11.2024','kerala','12
 
 
 create table approved_leave_requests(date_of_departure varchar(20),date_of_arrival varchar(20),destination varchar(255),phone_number varchar(15),parents_phone_number varchar(15),name varchar(100),rollnumber varchar(50) primary key);
-insert into pending_leave_requests values('31.10.2024','04.11.2024','bengaluru','1234534890','0988954321','john','103');
+insert into approved_leave_requests values('31.10.2024','04.11.2024','bengaluru','1234534890','0988954321','john','103');
 
 
 
